@@ -65,46 +65,6 @@ public with sharing class CarModelsSelector extends fflib_SObjectSelector {
         // Finally build the query to execute
         toSOQL());
     }
-    
-    public List<CarModelInfo> selectCarModelInfo(String condition) {
-        List<CarModelInfo> carModelInfos = new List<CarModelInfo>();
-        
-        system.debug('Query here====');
-        String query = newQueryFactory(false).
-            selectField(Car_Model__c.Id).
-            selectField(Car_Model__c.Seats__c).
-            selectField(Car_Model__c.Price__c).
-            selectField(Car_Model__c.Engine__c).
-            selectField(Car_Model__c.Stage__c).
-            selectField(Car_Model__c.Name).
-            selectField(Car_Model__c.Car__c).
-            selectField('Car__r.Name').
-            selectField('Car__r.Style__c').
-            selectField('Car__r.Manufacturer__c').
-            setCondition(condition).toSOQL();
-        system.debug(query);
-        
-        for(Car_Model__c carModel : Database.query(query)){
-        	carModelInfos.add(new CarModelInfo(carModel));
-        }
-        
-        return carModelInfos;
-    }
-    
-    public class CarModelInfo {       
-        private Car_Model__c carModel;
-        public Id id { get { return this.carModel.Id; } }     
-        public String seats { get { return this.carModel.Seats__c; } }
-		public Decimal price { get { return this.carModel.Price__c; } }        
-        public String engine { get { return this.carModel.Engine__c; } }       
-        public String carModelName { get { return this.carModel.Name; } }      
-        public String stage { get { return this.carModel.Stage__c; } }
-        public String car { get { return this.carModel.Car__c; } }
-    	public String carName { get { return this.carModel.Car__r.Name; } }
-        public String carStyle { get { return this.carModel.Car__r.Style__c; } }
-        public String carManufacturer { get { return this.carModel.Car__r.Manufacturer__c; } }
-        private CarModelInfo(Car_Model__c carModel) { this.carModel = carModel; }         
-    }
 
     public List<Car_Model__c> selectCarModels(String condition) {
         List<Car_Model__c> carModelInfos = new List<Car_Model__c>();
@@ -136,13 +96,11 @@ public with sharing class CarModelsSelector extends fflib_SObjectSelector {
     public List<Car_Model__c> selectCarModelsWithBookings(){
         List<Car_Model__c> carModelInfos = new List<Car_Model__c>();
         
-        fflib_QueryFactory opportunitiesQueryFactory = newQueryFactory();
-        // Add a query sub-select via the Query Factory for the Opportunity Products
-        fflib_QueryFactory lineItemsQueryFactory =
-            new CarBookingsSelector().
-                addQueryFactorySubselect(opportunitiesQueryFactory);
+        fflib_QueryFactory carModelsQueryFactory = newQueryFactory();
+        fflib_QueryFactory carBookingQueryFactory = new CarBookingsSelector().addQueryFactorySubselect(carModelsQueryFactory);
         
-        System.debug(opportunitiesQueryFactory.toSOQL());
+        String query = carModelsQueryFactory.toSOQL();
+        carModelInfos = Database.query(query);
         return carModelInfos;
     }
 }
