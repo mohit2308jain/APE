@@ -86,9 +86,7 @@ public with sharing class CarModelsSelector extends fflib_SObjectSelector {
             toSOQL();
         system.debug(query);
         
-        for(Car_Model__c carModel : Database.query(query)){
-        	carModelInfos.add(carModel);
-        }
+        carModelInfos = Database.query(query);
         
         return carModelInfos;
     }

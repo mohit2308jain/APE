@@ -27,7 +27,6 @@ public with sharing class CarBookingsService {
     }
 
     public void updateCarBookingStage(List<Car_Booking__c> carBookingsToBeUpdated, String stage){
-        SavePoint sp = Database.setSavePoint();
         try{
             carBooking = new CarBookings(carBookingsToBeUpdated);
             carBooking.updateBookingStage(uow, stage);
@@ -35,13 +34,11 @@ public with sharing class CarBookingsService {
             uow.commitWork();
         }
         catch (Exception e) {
-            Database.rollback(sp);
             throw e;
         }
     }
 
     public void deleteCarBooking(List<Car_Booking__c> carBookingsToBeDeleted){
-        SavePoint sp = Database.setSavePoint();
         try{
             carBooking = new CarBookings(carBookingsToBeDeleted);
             carBooking.deleteCarBooking(uow);
@@ -49,7 +46,6 @@ public with sharing class CarBookingsService {
             uow.commitWork();
         }
         catch (Exception e) {
-            Database.rollback(sp);
             throw e; 
         }
     }
