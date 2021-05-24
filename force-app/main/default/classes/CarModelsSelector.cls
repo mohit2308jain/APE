@@ -100,6 +100,7 @@ public with sharing class CarModelsSelector extends fflib_SObjectSelector {
         fflib_QueryFactory carBookingQueryFactory = new CarBookingsSelector().addQueryFactorySubselect(carModelsQueryFactory);
         
         String query = carModelsQueryFactory.toSOQL();
+        System.debug(query);
         carModelInfos = Database.query(query);
         return carModelInfos;
     }
@@ -107,14 +108,9 @@ public with sharing class CarModelsSelector extends fflib_SObjectSelector {
 
 /*
 CarModelsSelector sel = new CarModelsSelector();
-List<CarModelsSelector.CarModelInfo> l1 = sel.selectCarModelInfo('Stage__c = \'Launched\'');
-for(CarModelsSelector.CarModelInfo lk: l1){
-	system.debug(lk.carStyle);
-    system.debug(lk.carModelName);
-}
-List<CarModelsSelector.CarModelInfo> l2 = sel.selectCarModelInfo('Stage__c = \'Manufactured\'');
-for(CarModelsSelector.CarModelInfo lk: l2){
-	system.debug(lk.carStyle);
-    system.debug(lk.carModelName);
+List<Car_Model__c> cc = sel.selectCarModelsWithBookings();
+for(Car_Model__c c: cc){
+    system.debug(c);
+    system.debug(c.Car_Bookings__r);
 }
  */
