@@ -1,0 +1,129 @@
+<template>
+    <template if:true={carModels}>
+        <lightning-card title="Car Model List">
+            <div class="slds-box slds-theme_shade slds-theme_alert-texture slds-var-m-around_small">
+                <lightning-input type="search" onchange={searchRecords} 
+                    class="slds-var-m-bottom_small" 
+                    label="Search" placeholder="Enter Car Model.."></lightning-input>
+        
+                <div if:false={len} class="slds-page-header__title slds-text-heading_large slds-text-align_center slds-text-color_error">
+                    No Records Found!
+                </div>
+            </div>
+
+            <template if:true={len}>
+                <lightning-datatable key-field="Id"
+                    data={carModels}
+                    columns={columns}
+                    onrowaction={handleRowActions}
+                    show-row-number-column="true"
+                    hide-checkbox-column="true"
+                    class="slds-var-p-around_small"></lightning-datatable>
+            </template>
+        </lightning-card>
+
+        <template if:true={showViewModal}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                      <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeViewModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">View Car Model</h2>
+                    </header>
+    
+                    <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1">
+                        
+                        <lightning-card variant="Narrow" icon-name="custom:custom31" title={carModel.Name}>
+                            <div class="slds-box">
+                                <div class="slds-grid slds-wrap">
+                                    <div class="slds-col slds-size_1-of-1">
+                                        <lightning-formatted-text class="slds-form-element__label" value="Car">
+                                        </lightning-formatted-text>
+                                        <lightning-formatted-text class="slds-form-element__static" value={carModel.Car__r.Name}>
+                                        </lightning-formatted-text>
+
+                                        <lightning-formatted-text class="slds-form-element__label" value="Base Price">
+                                        </lightning-formatted-text>
+                                        <lightning-formatted-number class="slds-form-element__static" value={carModel.Price__c}
+                                            format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                    </div>
+
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-formatted-text class="slds-form-element__label" value="Engine">
+                                        </lightning-formatted-text>
+                                        <lightning-formatted-text class="slds-form-element__static" value={carModel.Engine__c}>
+                                        </lightning-formatted-text>
+                                    </div>
+
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-formatted-text class="slds-form-element__label" value="Seats">
+                                        </lightning-formatted-text>
+                                        <lightning-formatted-text class="slds-form-element__static" value={carModel.Seats__c}>
+                                        </lightning-formatted-text>
+                                    </div>
+
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-formatted-text class="slds-form-element__label" value="Manufacturer">
+                                        </lightning-formatted-text>
+                                        <lightning-formatted-text class="slds-form-element__static" value={carModel.Car__r.Manufacturer__c}>
+                                        </lightning-formatted-text>
+                                    </div>
+
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-formatted-text class="slds-form-element__label" value="Car Style">
+                                        </lightning-formatted-text>
+                                        <lightning-formatted-text class="slds-form-element__static" value={carModel.Car__r.Style__c}>
+                                        </lightning-formatted-text>
+                                    </div>
+                                </div>
+                            </div>
+                        </lightning-card>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_destructive" onclick={closeViewModal}>Close</button>
+                    </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <template if:true={showUpdateModal}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                      <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeUpdateModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">Upload quality and safety check documents</h2>
+                    </header>
+    
+                    <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-2">
+                        <lightning-file-upload
+                                label="Attach receipt"
+                                name="fileUploader"
+                                accept={acceptedFormats}
+                                record-id={idForFile}
+                                onuploadfinished={handleUploadFinished}
+                                multiple>
+                        </lightning-file-upload>
+                    </div>
+                    
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_destructive" onclick={closeUpdateModal}>Close</button>
+                    </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+    </template>
+</template>

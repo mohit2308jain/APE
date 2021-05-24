@@ -1,0 +1,172 @@
+<template>
+    <lightning-card title={pagetitle}>
+
+        <lightning-record-view-form record-id={recId}
+            object-api-name="Car_Model__c">
+            <div class="slds-box">
+                <lightning-output-field field-name="Name">
+                </lightning-output-field>
+
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-output-field field-name="Engine__c">
+                        </lightning-output-field>  
+                        <lightning-output-field field-name="Price__c">
+                        </lightning-output-field>                            
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2">
+                        <lightning-output-field field-name="Seats__c">
+                        </lightning-output-field>
+                    </div>
+                </div>
+            </div>
+        </lightning-record-view-form>
+
+        <template if:true={showBookingForm}>
+            <lightning-record-edit-form object-api-name="Car_Booking__c" onsuccess={createCarBooking}>
+                    <form class="slds-box">
+                        <h3>Click <lightning-icon icon-name="utility:info"
+                            size="small" alternative-text="Info" title="Info">
+                            </lightning-icon> for more info!</h3>
+                        <br />
+
+                        <lightning-input-field field-name={customeracc_field}></lightning-input-field>
+    
+                        <lightning-input-field field-name={cusemail_field}></lightning-input-field>
+    
+                        <lightning-input-field field-name={carmodel_field} value={recId}></lightning-input-field>
+    
+                        <lightning-input-field field-name={carcolor_field}></lightning-input-field>
+    
+                        <lightning-input-field field-name={speakers_field}></lightning-input-field>
+    
+                        <lightning-input-field field-name={diesel_field}></lightning-input-field>
+    
+                        <lightning-input-field field-name={airbags_field}></lightning-input-field>
+    
+                        <footer class="slds-card__footer">
+                            <lightning-button class="slds-var-m-around_small" type="submit" name="save" variant="brand" label="Add Booking"></lightning-button>    
+                        </footer>
+                        
+                    </form>
+            </lightning-record-edit-form>
+        </template>
+
+        <template if:true={showBookingRecord}>
+
+            <lightning-record-view-form record-id={bookingId}
+            object-api-name="Car_Booking__c">
+                <div class="slds-box">
+                    <lightning-output-field field-name="Name">
+                    </lightning-output-field>
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-output-field field-name="Account__c">
+                            </lightning-output-field>
+                            <lightning-output-field field-name="Car_Color__c">
+                            </lightning-output-field>
+                            <lightning-output-field field-name="Speakers__c">
+                            </lightning-output-field>
+                            <lightning-output-field field-name="Extra_Airbags__c">
+                            </lightning-output-field>                                
+                        </div>
+                    
+
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-output-field field-name="Customer_Email__c">
+                            </lightning-output-field>
+                            <lightning-output-field field-name="Booking_Stage__c">
+                            </lightning-output-field>
+                            <lightning-output-field field-name="Diesel__c">
+                            </lightning-output-field>
+                            <lightning-output-field field-name="Total_Price__c">
+                            </lightning-output-field>
+                        </div>
+                    </div>
+                </div>
+            </lightning-record-view-form>
+
+            <footer class="slds-card__footer">
+                <div class="slds-button-group" role="group">
+                    <lightning-button label="Cancel Booking" variant="destructive" class="slds-var-m-around_small"
+                        icon-name="standard:cancel_checkout" icon-position="right" 
+                        onclick={openDeleteModal}></lightning-button>
+
+                    <lightning-button label="Complete Payment" variant="success" class="slds-var-m-around_small"
+                        icon-name="utility:money" icon-position="right" 
+                        onclick={openPaymentModal}></lightning-button>
+                </div>
+            </footer>
+
+            <template if:true={showPaymentModal}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closePaymentModal}>
+                            <lightning-icon icon-name="utility:close"
+                                alternative-text="close"
+                                variant="inverse"
+                                size="small" ></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Complete Payment</h2>
+                        </header>
+        
+                        <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1">
+                            <lightning-record-view-form record-id={bookingId}
+                                object-api-name="Car_Booking__c">
+                                    <div class="slds-box">
+                                        <lightning-output-field field-name="Name">
+                                        </lightning-output-field>
+                                        <lightning-output-field field-name="Total_Price__c">
+                                        </lightning-output-field>                              
+                                    </div>
+                            </lightning-record-view-form>
+                        </div>
+
+                        <footer class="slds-modal__footer">
+                            <lightning-button label="Close" variant="destructive" class="slds-var-m-around_small"
+                                onclick={closePaymentModal}></lightning-button>
+                            <lightning-button label="Pay" variant="success" class="slds-var-m-around_small"
+                                onclick={completePayment}></lightning-button>
+                        </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+
+            <template if:true={showDeleteModal}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeDeleteModal}>
+                            <lightning-icon icon-name="utility:close"
+                                alternative-text="close"
+                                variant="inverse"
+                                size="small" ></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">Delete Booking</h2>
+                        </header>
+        
+                        <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-2">
+                            <h1>Are you sure you want to delete this booking?</h1>
+                        </div>
+
+                        <footer class="slds-modal__footer">
+                            <lightning-button label="NO" variant="success" class="slds-var-m-around_small"
+                                onclick={closeDeleteModal}></lightning-button>
+                            
+                            <lightning-button label="YES" variant="destructive" class="slds-var-m-around_small"
+                                onclick={cancelBooking}></lightning-button>
+                        </footer>
+                        </div>
+                    </section>
+                    <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+
+        </template>
+
+    </lightning-card>
+</template>
