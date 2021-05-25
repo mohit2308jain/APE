@@ -7,7 +7,8 @@ public with sharing class CarModelsSelector extends fflib_SObjectSelector {
             Car_Model__c.Engine__c, 
             Car_Model__c.Seats__c, 
             Car_Model__c.Price__c, 
-            Car_Model__c.Stage__c};
+            Car_Model__c.Stage__c,
+            Car_Model__c.Total_Cars_Sold__c};
     }
     
     public Schema.SObjectType getSObjectType() {
@@ -78,6 +79,7 @@ public with sharing class CarModelsSelector extends fflib_SObjectSelector {
             selectField(Car_Model__c.Stage__c).
             selectField(Car_Model__c.Name).
             selectField(Car_Model__c.Car__c).
+            selectField(Car_Model__c.Total_Cars_Sold__c).
             selectField('Car__r.Name').
             selectField('Car__r.Style__c').
             selectField('Car__r.Manufacturer__c').

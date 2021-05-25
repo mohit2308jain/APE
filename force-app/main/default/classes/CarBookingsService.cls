@@ -2,7 +2,7 @@ public with sharing class CarBookingsService {
 
     public static CarBookingsSelector carBookingsSelector = new CarBookingsSelector();
     public static CarBookings carBooking;
-    public static fflib_SObjectUnitOfWork uow = new fflib_SObjectUnitOfWork(new Schema.SObjectType[] { Car_Booking__c.SObjectType });
+    public static fflib_SObjectUnitOfWork uow = new fflib_SObjectUnitOfWork(new Schema.SObjectType[] { Car_Booking__c.SObjectType, Car_Model__c.SObjectType });
 
     public List<Car_Booking__c> fetchAllCarBookings(){
         List<Car_Booking__c> carBookingsList = carBookingsSelector.selectAllCarBookings();

@@ -9,6 +9,12 @@ public with sharing class CarModels extends fflib_SObjectDomain {
         }
     }
 
+    public override void onApplyDefaults() {
+        for(Car_Model__c carModel : (List<Car_Model__c>) Records) {
+            carModel.Total_Cars_Sold__c = 0;               
+        }
+    }
+
     public override void onValidate(Map<Id,sObject> existingRecords) {
         System.debug(existingRecords);
         for(Car_Model__c cc: (List<Car_Model__c>) Records) {
