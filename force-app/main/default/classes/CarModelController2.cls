@@ -3,6 +3,7 @@ public with sharing class CarModelController2 {
     public string accId {get; set;}
     public List<Car_Model__c> carModelsList {get; set;}
     public Car_Model__c carModelRecord {get; set;}
+    public static CarModelsSelector carModelsSelector = new CarModelsSelector();
     public static CarModelsService carModelServiceVar = new CarModelsService();
     
     public carModelController2(){
@@ -12,7 +13,8 @@ public with sharing class CarModelController2 {
     
     private void loadData(){
         String condition = 'Stage__c = \'Manufacturing\'';
-        carModelsList = carModelServiceVar.fetchCarModelsByStage(condition);
+        carModelsList = carModelsSelector.selectCarModels(condition);
+        
         //[SELECT Id, Name, Engine__c, Seats__c, Price__c, Stage__c FROM Car_Model__c ORDER BY LastModifiedDate DESC];
     }
 
@@ -102,12 +104,14 @@ public with sharing class CarModelController2 {
     @AuraEnabled
     public static List<Car_Model__c> getLaunchedCarModels() {
         String condition = 'Stage__c = \'Launched\'';
-        return carModelServiceVar.fetchCarModelsByStage(condition);
+        List<Car_Model__c> carModelsList = carModelsSelector.selectCarModels(condition);
+        return carModelsList;
     }
 
     @AuraEnabled
     public static List<Car_Model__c> getManufacturedCarModels() {
         String condition = 'Stage__c = \'Manufactured\'';
-        return carModelServiceVar.fetchCarModelsByStage(condition);
+        List<Car_Model__c> carModelsList = carModelsSelector.selectCarModels(condition);
+        return carModelsList;
     }
 }

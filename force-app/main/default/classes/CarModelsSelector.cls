@@ -51,7 +51,7 @@ public with sharing class CarModelsSelector extends fflib_SObjectSelector {
         return (List<Car_Model__c>) Database.query(query);
     }
     
-    public List<Car_Model__c> selectRecentlyLaunchedCars2() {
+    public List<Car_Model__c> selectRecentlyLaunchedCars2(string condition) {
         return (List<Car_Model__c>) Database.query(
         /**
           Query factory has been pre-initialised by calling
@@ -62,7 +62,7 @@ public with sharing class CarModelsSelector extends fflib_SObjectSelector {
           Now focus on building the remainder of the
           query needed for this method.
         */
-        setCondition('Stage__c = \'Launched\'').
+        setCondition(condition).
         // Finally build the query to execute
         toSOQL());
     }
@@ -104,7 +104,15 @@ public with sharing class CarModelsSelector extends fflib_SObjectSelector {
         carModelInfos = Database.query(query);
         return carModelInfos;
     }
+
+    public Database.QueryLocator queryLocatorExample(){
+        return Database.getQueryLocator(
+            newQueryFactory().setCondition('CreatedDate = Today').toSOQL()
+        );
+    }
 }
+
+    
 
 /*
 CarModelsSelector sel = new CarModelsSelector();
