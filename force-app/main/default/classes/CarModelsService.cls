@@ -1,18 +1,7 @@
 public with sharing class CarModelsService {
 
-    public static CarModelsSelector carModelsSelector = new CarModelsSelector();
     public static CarModels carModel;
     public static fflib_SObjectUnitOfWork uow = new fflib_SObjectUnitOfWork(new Schema.SObjectType[] { Car_Model__c.SObjectType });
-
-    public List<Car_Model__c> fetchAllCarModels(){
-        List<Car_Model__c> carModelsList = carModelsSelector.selectAllCarModels();
-        return carModelsList;
-    }
-
-    public List<Car_Model__c> fetchCarModelsByStage(String condition){
-        List<Car_Model__c> carModelsList = carModelsSelector.selectCarModels(condition);
-        return carModelsList;
-    }
 
     public void createCarModel(List<Car_Model__c> carModelsList){
         try{
@@ -24,6 +13,10 @@ public with sharing class CarModelsService {
         catch(Exception e){
             throw e;
         }
+    }
+
+    public void createCarModel(Car_Model__c carModelRecord){
+        createCarModel(new List<Car_Model__c>{carModelRecord});
     }
 
     public void updateCarModels(List<Car_Model__c> carModelsList){
@@ -50,6 +43,10 @@ public with sharing class CarModelsService {
         }
     }
 
+    public void updateCarModelStage(Car_Model__c carModelRecord, String stage){
+        updateCarModelStage(new List<Car_Model__c>{carModelRecord}, stage);
+    }
+
     public void deleteCarModel(List<Car_Model__c> carModelToBeDeleted){
         try{
             carModel = new CarModels(carModelToBeDeleted);
@@ -60,5 +57,9 @@ public with sharing class CarModelsService {
         catch (Exception e) {
             throw e; 
         }
+    }
+
+    public void deleteCarModel(Car_Model__c carModelRecord){
+        deleteCarModel(new List<Car_Model__c>{carModelRecord});
     }
 }

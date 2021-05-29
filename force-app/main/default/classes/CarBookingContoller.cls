@@ -1,13 +1,16 @@
 public with sharing class CarBookingContoller {
+    public static CarBookingsSelector carBookingsSelector = new CarBookingsSelector();
     public static CarBookingsService carBookingServiceVar = new CarBookingsService();
     
     public static List<Car_Booking__c> getCarBookingsById(set<Id> ids){
-        return carBookingServiceVar.fetchByCarBookingsId(ids);
+        List<Car_Booking__c> carBookingsList = carBookingsSelector.selectById(ids);
+        return carBookingsList;
     }
 
     @AuraEnabled
     public static List<Car_Booking__c> getCarBookings() {
-        return carBookingServiceVar.fetchAllCarBookings();
+        List<Car_Booking__c> carBookingsList = carBookingsSelector.selectAllCarBookings();
+        return carBookingsList;
     }  
 
     @AuraEnabled

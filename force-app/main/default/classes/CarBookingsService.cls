@@ -1,18 +1,7 @@
 public with sharing class CarBookingsService {
 
-    public static CarBookingsSelector carBookingsSelector = new CarBookingsSelector();
     public static CarBookings carBooking;
     public static fflib_SObjectUnitOfWork uow = new fflib_SObjectUnitOfWork(new Schema.SObjectType[] { Car_Booking__c.SObjectType, Car_Model__c.SObjectType });
-
-    public List<Car_Booking__c> fetchAllCarBookings(){
-        List<Car_Booking__c> carBookingsList = carBookingsSelector.selectAllCarBookings();
-        return carBookingsList;
-    }
-
-    public List<Car_Booking__c> fetchByCarBookingsId(set<Id> ids){
-        List<Car_Booking__c> carBookingsList = carBookingsSelector.selectById(ids);
-        return carBookingsList;
-    }
 
     public void createCarBooking(List<Car_Booking__c> carBookingsList){
         try{
@@ -24,6 +13,10 @@ public with sharing class CarBookingsService {
         catch(Exception e){
             throw e;
         }
+    }
+
+    public void createCarBooking(Car_Booking__c carBookingsRecord){
+        createCarBooking(new List<Car_Booking__c>{carBookingsRecord});
     }
 
     public void updateCarBookingStage(List<Car_Booking__c> carBookingsToBeUpdated, String stage){

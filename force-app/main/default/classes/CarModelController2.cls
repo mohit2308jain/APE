@@ -20,7 +20,7 @@ public with sharing class CarModelController2 {
 
     public Pagereference saveCarModel(){
         try{
-            carModelServiceVar.createCarModel(new List<Car_Model__c>{carModelRecord});
+            carModelServiceVar.createCarModel(carModelRecord);
             
             PageReference pageRef = new PageReference(ApexPages.currentPage().getUrl());
             pageRef.setRedirect(true);
@@ -46,18 +46,18 @@ public with sharing class CarModelController2 {
             return;
         }
         
-        Car_Model__c tobeUpdated = null;
+        Car_Model__c carModelTobeUpdated = null;
         for(Car_Model__c model: carModelsList){
             if(model.Id == accId){
-                tobeUpdated = model;
+                carModelTobeUpdated = model;
                 break;
             }
         }
 
-        if(tobeUpdated != null){
+        if(carModelTobeUpdated != null){
             SavePoint sp = Database.setSavePoint();
             try{
-                carModelServiceVar.updateCarModelStage(new List<Car_Model__c>{tobeUpdated}, 'Manufactured');
+                carModelServiceVar.updateCarModelStage(carModelTobeUpdated, 'Manufactured');
                 loadData();
             }
             catch (Exception e) {
@@ -71,17 +71,17 @@ public with sharing class CarModelController2 {
             return;
         }
         
-        Car_Model__c tobeDeleted = null;
+        Car_Model__c carModelTobeDeleted = null;
         for(Car_Model__c model: carModelsList){
             if(model.Id == accId){
-                tobeDeleted = model;
+                carModelTobeDeleted = model;
                 break;
             }
         }
         
-        if(tobeDeleted != null){
+        if(carModelTobeDeleted != null){
             try{
-                carModelServiceVar.deleteCarModel(new List<Car_Model__c>{tobeDeleted});
+                carModelServiceVar.deleteCarModel(carModelTobeDeleted);
                 loadData();
             }
             catch (Exception e) {
@@ -93,7 +93,7 @@ public with sharing class CarModelController2 {
     @AuraEnabled
     public static String updateToLaunched(Car_Model__c carModelRecordForLaunch){
         try{
-            carModelServiceVar.updateCarModelStage(new List<Car_Model__c>{carModelRecordForLaunch}, 'Launched');
+            carModelServiceVar.updateCarModelStage(carModelRecordForLaunch, 'Launched');
             return 'Success';
         }
         catch (Exception e) {
